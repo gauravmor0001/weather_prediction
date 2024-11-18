@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f8ff;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #e8f5e9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather Prediction</h1>
+    <form id="weatherForm">
+        <label for="year">Year:</label>
+        <input type="number" id="year" name="year" required>
+        
+        <label for="month">Month:</label>
+        <input type="number" id="month" name="month" required>
+        
+        <button type="submit">Predict</button>
+    </form>
+    <div id="result" class="result" style="display: none;"></div>
+    <script>
+        document.getElementById('weatherForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const year = document.getElementById('year').value;
+            const month = document.getElementById('month').value;
+            
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `year=${year}&month=${month}`
+            });
+            
+            const data = await response.json();
+            const resultDiv = document.getElementById('result');
+            if (data.error) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `<strong>Error:</strong> ${data.error}`;
+            } else {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `<strong>Average Temperature:</strong> ${data.average_temperature.toFixed(2)} °C<br>
+                                       <strong>Average Humidity:</strong> ${data.average_humidity.toFixed(2)}%`;
+            }
+        });
+    </script>
+</body>
+</html>
