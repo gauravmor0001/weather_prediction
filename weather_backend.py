@@ -5,7 +5,7 @@ import pandas as pd
 app = Flask(__name__)
 
 # Load the preprocessed weather dataset
-weather_data = pd.read_csv('cleanWeatherData.csv', index_col='DATE')
+weather_data = pd.read_csv('cleanWeatherData.xls', index_col='DATE')
 weather_data.index = pd.to_datetime(weather_data.index)
 
 @app.route('/')
